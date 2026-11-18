@@ -1,0 +1,169 @@
+openapi: 3.1.0
+info:
+  title: DAR — DarGlobal AI Property Assistant API
+  description: Retrieval-Augmented Generation (RAG) assistant for DarGlobal and Wasalt
+    real estate.
+  version: 1.0.0
+paths:
+  /health:
+    get:
+      tags:
+      - System
+      summary: Health Check
+      description: Health check endpoint for Docker & deployment monitoring (DAR-24,
+        DAR-27).
+      operationId: health_check_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/stats:
+    get:
+      tags:
+      - System
+      summary: Get Stats
+      description: Return dataset statistics from data/summary.json (DAR-19, DAR-24).
+      operationId: get_stats_api_stats_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/chat:
+    post:
+      tags:
+      - Chat
+      summary: Chat
+      description: Ask a question to the DarGlobal and Wasalt property assistant (DAR-24).
+      operationId: chat_api_chat_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ChatRequest:
+      properties:
+        query:
+          type: string
+          maxLength: 1000
+          title: Query
+          example: What are the starting prices for The Astera by Aston Martin?
+        site:
+          anyOf:
+          - type: string
+            enum:
+            - darglobal
+            - wasalt
+          - type: 'null'
+          title: Site
+          description: Optional filter by property portal
+      type: object
+      required:
+      - query
+      title: ChatRequest
+    ChatResponse:
+      properties:
+        answer:
+          type: string
+          title: Answer
+        sources:
+          items:
+            $ref: '#/components/schemas/SourceItem'
+          type: array
+          title: Sources
+        model_used:
+          type: string
+          title: Model Used
+        latency_ms:
+          type: number
+          title: Latency Ms
+        cached:
+          type: boolean
+          title: Cached
+          default: false
+      type: object
+      required:
+      - answer
+      - sources
+      - model_used
+      - latency_ms
+      title: ChatResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SourceItem:
+      properties:
+        index:
+          type: integer
+          title: Index
+        title:
+          type: string
+          title: Title
+        url:
+          type: string
+          title: Url
+        site:
+          type: string
+          title: Site
+        chunk_type:
+          type: string
+          title: Chunk Type
+      type: object
+      required:
+      - index
+      - title
+      - url
+      - site
+      - chunk_type
+      title: SourceItem
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
