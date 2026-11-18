@@ -19,7 +19,7 @@
 
 ## Deliverables & Links
 
-- **Repository:** `https://github.com/dar-project/dar-chatbot`
+- **Repository:** `https://github.com/tilakchow/DAR-AIChatBot`
 - **Container Image:** `Dockerfile` (Python 3.11-slim, non-root user `appuser`, health check enabled)
 - **OpenAPI Specification:** `openapi.yaml` (OpenAPI 3.1)
 - **Public Deployment URL:** `https://huggingface.co/spaces/varun-dar/dar-property-assistant` (or `http://localhost:7860` locally)

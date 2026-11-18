@@ -9,8 +9,8 @@
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/dar-project/dar-chatbot.git
-cd dar-chatbot
+git clone https://github.com/tilakchow/DAR-AIChatBot.git
+cd DAR-AIChatBot
 
 # 2. Configure environment (add your OpenRouter key)
 cp .env.example .env
