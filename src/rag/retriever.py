@@ -54,6 +54,40 @@ class RetrievedChunk:
         }
 
 
+# Arabic to English real estate keyword and project expansion dictionary
+ARABIC_EXPANSIONS = {
+    "أستيرا": "astera",
+    "استيرا": "astera",
+    "ترامب": "trump",
+    "فلل": "villas",
+    "فيلا": "villa",
+    "شقق": "apartments",
+    "شقة": "apartment",
+    "الرياض": "riyadh",
+    "جدة": "jeddah",
+    "مكة": "makkah",
+    "دبي": "dubai",
+    "وصلت": "wasalt",
+    "أسعار": "prices price",
+    "سعر": "price",
+    "اكتمال": "completion completed",
+    "مشروع": "project",
+    "برج": "tower",
+    "موقع": "location",
+    "ميسوني": "missoni",
+    "عمان": "oman",
+}
+
+
+def expand_query(query: str) -> str:
+    """Expand bilingual terms so Arabic queries match English project names and vice-versa."""
+    expanded = [query]
+    for ar_term, en_term in ARABIC_EXPANSIONS.items():
+        if ar_term in query:
+            expanded.append(en_term)
+    return " ".join(expanded)
+
+
 class HybridRetriever:
     def __init__(
         self,
@@ -89,9 +123,11 @@ class HybridRetriever:
         if not query.strip() or not self.chunks_by_id:
             return []
 
+        expanded_q = expand_query(query)
+
         # 1. Retrieve initial candidate list from BM25
         # Fetch more candidates to allow per-URL capping and re-ranking
-        bm25_results = self.bm25.score(query, top_k=top_k * 5, site_filter=site_filter)
+        bm25_results = self.bm25.score(expanded_q, top_k=top_k * 5, site_filter=site_filter)
 
         # 2. Reciprocal Rank Fusion / scoring
         # In BM25-only / fallback mode: RRF score = 1 / (rrf_k + rank)
