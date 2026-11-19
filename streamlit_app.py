@@ -436,6 +436,18 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
+def resolve_api_key() -> str:
+    """Resolve OpenRouter API key from st.secrets or os.environ, sanitizing any accidental line breaks."""
+    if hasattr(st, "secrets"):
+        try:
+            if "OPENROUTER_API_KEY" in st.secrets:
+                val = str(st.secrets["OPENROUTER_API_KEY"]).strip().replace("\n", "").replace("\r", "").strip("\"'")
+                if val:
+                    return val
+        except Exception:
+            pass
+    return os.environ.get("OPENROUTER_API_KEY", "").strip().replace("\n", "").replace("\r", "").strip("\"'")
+
 # -----------------------------------------------------------------------------
 # 3. Cached RAG Retriever & OpenRouter Client
 # -----------------------------------------------------------------------------
@@ -444,11 +456,10 @@ def get_retriever():
     return HybridRetriever()
 
 @st.cache_resource
-def get_client():
-    return OpenRouterClient()
+def get_client(api_key: str):
+    return OpenRouterClient(api_key=api_key)
 
 retriever = get_retriever()
-client = get_client()
 
 # -----------------------------------------------------------------------------
 # 4. Session State Initialization
@@ -584,6 +595,8 @@ def process_query(user_query: str):
     user_prompt, sources = format_context_prompt(user_query, chunks_dicts)
 
     # 6. Call OpenRouter
+    api_key = resolve_api_key()
+    client = get_client(api_key)
     try:
         completion = client.generate(
             system_prompt=SYSTEM_PROMPT,
