@@ -20,8 +20,9 @@ from typing import Optional
 
 logger = logging.getLogger("openrouter")
 
-# Shortlisted free models per plan section 5 and ADR-0003
+# Shortlisted free models per plan section 5 and user specification
 DEFAULT_MODELS = [
+    "nvidia/nemotron-3-ultra-550b-a55b:free",
     "nvidia/nemotron-3.5-super-vl:free",
     "meta-llama/llama-3.3-70b-instruct:free",
     "google/gemini-2.0-flash-exp:free",
@@ -56,7 +57,14 @@ class OpenRouterClient:
     ):
         # API key comes strictly from parameter or environment
         self._api_key = api_key or os.environ.get("OPENROUTER_API_KEY", "")
-        self.models = models or DEFAULT_MODELS
+        primary_override = os.environ.get("OPENROUTER_PRIMARY_MODEL")
+        base_models = models or list(DEFAULT_MODELS)
+        if primary_override and primary_override not in base_models:
+            self.models = [primary_override] + base_models
+        elif primary_override:
+            self.models = [primary_override] + [m for m in base_models if m != primary_override]
+        else:
+            self.models = base_models
         self.timeout = timeout
         self.max_tokens = max_tokens
         self.temperature = temperature
