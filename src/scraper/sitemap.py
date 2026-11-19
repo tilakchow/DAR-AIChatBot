@@ -150,9 +150,17 @@ def _text(el: ET.Element, tag: str) -> Optional[str]:
     return None
 
 
+def _iter_children(root: ET.Element, tag: str) -> list[ET.Element]:
+    """Find child elements by tag: namespaced form first, then bare tag (for sitemaps without xmlns)."""
+    with_ns = list(root.iterfind(_ns(tag)))
+    if with_ns:
+        return with_ns
+    return list(root.iterfind(tag))
+
+
 def _parse_urlset(root: ET.Element) -> tuple[list[SitemapEntry], list[str]]:
     entries: list[SitemapEntry] = []
-    for url_el in root.iterfind(_ns("url")):
+    for url_el in _iter_children(root, "url"):
         loc_raw = _text(url_el, "loc")
         if not loc_raw:
             continue
@@ -167,7 +175,7 @@ def _parse_urlset(root: ET.Element) -> tuple[list[SitemapEntry], list[str]]:
 
 def _parse_sitemapindex(root: ET.Element) -> tuple[list[SitemapEntry], list[str]]:
     child_sitemaps: list[str] = []
-    for sitemap_el in root.iterfind(_ns("sitemap")):
+    for sitemap_el in _iter_children(root, "sitemap"):
         loc_raw = _text(sitemap_el, "loc")
         if loc_raw:
             child_sitemaps.append(normalise_url(loc_raw))

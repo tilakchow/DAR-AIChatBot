@@ -46,7 +46,7 @@ client = OpenRouterClient()
 # ---------------------------------------------------------------------------
 
 class ChatRequest(BaseModel):
-    query: str = Field(..., example="What are the starting prices for The Astera by Aston Martin?", max_length=1000)
+    query: str = Field(..., max_length=1000, json_schema_extra={"example": "What are the starting prices for The Astera by Aston Martin?"})
     site: Optional[Literal["darglobal", "wasalt"]] = Field(None, description="Optional filter by property portal")
 
 
