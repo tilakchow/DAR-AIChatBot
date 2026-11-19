@@ -2,7 +2,7 @@
 
 ## Reporting Security Issues
 If you discover a potential security vulnerability or credential leak in this project, please report it directly to the repository maintainer:
-- Primary Contact: Varun (Project Lead)
+- Primary Contact: Tilak (Project Lead)
 - Response Target: Within 24 hours
 
 ## Security Controls Implemented

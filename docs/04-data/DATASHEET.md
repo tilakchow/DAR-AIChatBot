@@ -11,7 +11,7 @@
 - **For what purpose was the dataset created?**  
   To provide verified, grounded domain context for the DAR AI Property Assistant, answering user queries regarding DarGlobal luxury real estate developments and Wasalt Saudi Arabian listings.
 - **Who created the dataset?**  
-  Varun, Junior AI Engineer candidate, as part of the DarGlobal Applied AI Technical Assignment.
+  Tilak, Junior AI Engineer candidate, as part of the DarGlobal Applied AI Technical Assignment.
 
 ---
 

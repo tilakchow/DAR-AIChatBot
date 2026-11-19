@@ -1,6 +1,6 @@
 # DAR Project Plan (Linear Status Model)
 
-- **Project Lead:** Varun
+- **Project Lead:** Tilak
 - **Target Deadline:** Friday, 20 November 2026
 - **Status Date:** 18 November 2026
 - **Methodology:** Linear Issues with strict Acceptance Criteria & Honesty Rule

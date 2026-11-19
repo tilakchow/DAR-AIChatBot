@@ -11,7 +11,7 @@
 - **Primary LLM:** `nvidia/nemotron-3.5-super-vl:free` via OpenRouter
 - **Fallback Cascade:** `meta-llama/llama-3.3-70b-instruct:free` -> `google/gemini-2.0-flash-exp:free` -> `openrouter/free`
 - **Retrieval Engine:** Custom BM25 Index with Bilingual Expansion & Reciprocal Rank Fusion ($k=60$)
-- **Developer:** Varun
+- **Developer:** Tilak
 - **Release Date:** 18 November 2026
 
 ---

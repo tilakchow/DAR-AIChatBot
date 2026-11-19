@@ -1,7 +1,7 @@
 # DAR Gap Report & Closure Audit
 
 - **Date:** 18 November 2026
-- **Lead:** Varun
+- **Lead:** Tilak
 - **Status:** All Gaps Resolved & Verified
 
 ---

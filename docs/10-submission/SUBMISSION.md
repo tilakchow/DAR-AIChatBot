@@ -1,7 +1,7 @@
 # Technical Assignment Submission — Junior AI Engineer (Applied AI)
 
 **To:** DarGlobal HR & Technical Assessment Team  
-**Candidate:** Varun  
+**Candidate:** Tilak  
 **Date:** 18 November 2026 (Submitted ahead of Friday, 20 November 2026 deadline)  
 **Role:** Junior AI Engineer — Applied AI  
 **Assignment:** DAR — DarGlobal AI Property Assistant  
@@ -22,7 +22,7 @@
 - **Repository:** `https://github.com/tilakchow/DAR-AIChatBot`
 - **Container Image:** `Dockerfile` (Python 3.11-slim, non-root user `appuser`, health check enabled)
 - **OpenAPI Specification:** `openapi.yaml` (OpenAPI 3.1)
-- **Public Deployment URL:** `https://huggingface.co/spaces/varun-dar/dar-property-assistant` (or `http://localhost:7860` locally)
+- **Public Deployment URL:** `https://huggingface.co/spaces/tilak-dar/dar-property-assistant` (or `http://localhost:7860` locally)
 
 ---
 

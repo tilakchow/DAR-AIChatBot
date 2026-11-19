@@ -1,7 +1,7 @@
 # Definition of Done Checklist & Final Delivery Report
 
 - **Date:** 2026-11-18
-- **Project Lead:** Varun
+- **Project Lead:** Tilak
 - **Tracked in:** DAR-48
 - **Milestones Completed:** M1 through M8 (48 / 48 Issues Completed)
 
