@@ -82,31 +82,48 @@ components:
       title: ChatRequest
     ChatResponse:
       properties:
-        answer:
+        answer_text:
           type: string
-          title: Answer
+          title: Answer Text
+          description: Clean conversational answer text
+        highlights:
+          items:
+            type: string
+          type: array
+          title: Highlights
+          description: Key bullet highlights or specifications
         sources:
           items:
             $ref: '#/components/schemas/SourceItem'
           type: array
           title: Sources
+          description: Verified sources with id, title, and url
         model_used:
           type: string
           title: Model Used
+          description: OpenRouter model name
         latency_ms:
           type: number
           title: Latency Ms
+          description: Request latency in milliseconds
         cached:
           type: boolean
           title: Cached
+          description: Whether the answer was served from the answer cache
           default: false
+        answer:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Answer
+          description: Backward compatibility alias for answer_text
       type: object
       required:
-      - answer
-      - sources
+      - answer_text
       - model_used
       - latency_ms
       title: ChatResponse
+      description: Structured response payload complying with requirements.
     HTTPValidationError:
       properties:
         detail:
@@ -118,29 +135,43 @@ components:
       title: HTTPValidationError
     SourceItem:
       properties:
-        index:
+        id:
           type: integer
-          title: Index
+          title: Id
+          description: 1-based source identifier
         title:
           type: string
           title: Title
+          description: Source document or listing title
         url:
           type: string
           title: Url
+          description: Verified canonical URL
         site:
-          type: string
+          anyOf:
+          - type: string
+          - type: 'null'
           title: Site
+          description: 'Portal: darglobal or wasalt'
         chunk_type:
-          type: string
+          anyOf:
+          - type: string
+          - type: 'null'
           title: Chunk Type
+          description: 'Type: page, faq, or listing'
+        index:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Index
+          description: Backward compatibility index alias
       type: object
       required:
-      - index
+      - id
       - title
       - url
-      - site
-      - chunk_type
       title: SourceItem
+      description: Structured citation item for a verified knowledge source.
     ValidationError:
       properties:
         loc:

@@ -182,8 +182,15 @@ class TestAPIEndpoints:
                 res = client.post("/api/chat", json={"query": "When will The Astera be completed?"})
                 assert res.status_code == 200
                 data = res.json()
-                assert "The Astera" in data["answer"]
+                assert "answer_text" in data
+                assert "The Astera" in data["answer_text"]
+                # Footnote [1] should be stripped from answer_text
+                assert "[1]" not in data["answer_text"]
+                assert "highlights" in data
                 assert len(data["sources"]) > 0
+                assert "id" in data["sources"][0]
+                assert "url" in data["sources"][0]
+                assert "title" in data["sources"][0]
                 assert "model_used" in data
                 assert "latency_ms" in data
         finally:
@@ -193,5 +200,54 @@ class TestAPIEndpoints:
         res = client.get("/")
         assert res.status_code == 200
         assert "DAR — AI Property Assistant" in res.text
-        assert "Wasalt.sa" in res.text
+        assert "marked.min.js" in res.text
+        assert "disclaimer-pinned" in res.text
+        assert "debug-panel" in res.text
+        assert "source-chip" in res.text
         assert "rtl" in res.text
+
+
+class TestStructuredAnswerAndSanitization:
+    def test_clean_answer_text_strips_citations_and_disclaimers(self):
+        from src.rag.schema import clean_answer_text
+        raw = (
+            "Based on the verified information from DarGlobal's database, "
+            "Trump International Hotel & Tower Dubai is situated on Sheikh Zayed Road [1][2].\n"
+            "- Unit Types: 1, 2, 3 bedroom apartments [1]\n"
+            "- Starting Price: AED 2,150,000 [3]\n\n"
+            "*Disclaimer: I am an AI assistant and cannot provide financial advice.*"
+        )
+        cleaned_text, highlights = clean_answer_text(raw)
+        assert "[1]" not in cleaned_text
+        assert "[2]" not in cleaned_text
+        assert "[3]" not in cleaned_text
+        assert "Disclaimer" not in cleaned_text
+        assert "Based on the verified information from DarGlobal's database" not in cleaned_text
+        assert "Trump International Hotel & Tower Dubai is situated on Sheikh Zayed Road." in cleaned_text
+        assert len(highlights) == 2
+        assert "[1]" not in highlights[0]
+        assert "[3]" not in highlights[1]
+
+    def test_decline_format(self):
+        from src.rag.schema import clean_answer_text
+        decline_msg = "I don't have enough verified information in the DarGlobal or Wasalt database to answer this question."
+        cleaned, hl = clean_answer_text(decline_msg)
+        assert "enough verified information" in cleaned
+        assert hl == []
+
+    def test_chat_response_schema(self):
+        from src.rag.schema import ChatResponse, SourceItem
+        cr = ChatResponse(
+            answer_text="Luxury villas starting at AED 2.5M.",
+            highlights=["3 bedrooms", "Private pool"],
+            sources=[SourceItem(id=1, title="Astera", url="https://darglobal.co.uk/astera")],
+            model_used="test-model",
+            latency_ms=150.0
+        )
+        data = cr.model_dump()
+        assert data["answer_text"] == "Luxury villas starting at AED 2.5M."
+        assert len(data["highlights"]) == 2
+        assert data["sources"][0]["id"] == 1
+        assert data["sources"][0]["url"] == "https://darglobal.co.uk/astera"
+
+
