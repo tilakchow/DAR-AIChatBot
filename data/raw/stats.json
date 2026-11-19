@@ -1,0 +1,22 @@
+{
+  "start_time": "2026-11-18",
+  "darglobal": {
+    "total_attempted": 25,
+    "ok": 18,
+    "blocked": 0,
+    "robots_disallowed": 0,
+    "http_error": 7,
+    "facts_extracted": 18,
+    "faqs_extracted": 100
+  },
+  "wasalt": {
+    "total_attempted": 17,
+    "ok": 1,
+    "blocked": 16,
+    "robots_disallowed": 0,
+    "http_error": 0,
+    "listings_extracted": 28
+  },
+  "duration_seconds": 151.54,
+  "total_pages_crawled": 19
+}

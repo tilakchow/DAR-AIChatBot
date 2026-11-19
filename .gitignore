@@ -19,9 +19,9 @@ build/
 .mypy_cache/
 .ruff_cache/
 
-# Data (raw crawl data can be large; processed index is baked into Docker image)
-data/raw/
-data/processed/
+# Data
+# Track processed index and raw crawl snapshot so clean clones and Docker builds work instantly
+
 
 # IDE
 .idea/
