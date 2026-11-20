@@ -1,11 +1,6 @@
 # DAR — DarGlobal AI Property Assistant
 
 AI-powered property assistant answering queries on DarGlobal international luxury real estate and Wasalt Saudi property listings using Retrieval-Augmented Generation (RAG) and free OpenRouter language models.
-
-## Live Application
-- **Live URL:** `http://localhost:7860` (or configured cloud deployment)
-- **API Documentation:** `/docs` (Swagger UI) and `/openapi.yaml`
-
 ---
 
 ## Key Capabilities
