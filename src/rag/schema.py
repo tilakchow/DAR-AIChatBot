@@ -43,14 +43,20 @@ def clean_answer_text(raw_text: str) -> tuple[str, list[str]]:
     text = re.sub(r'(\n|^)\s*Property prices and availability change frequently.*', '', text, flags=re.IGNORECASE)
     text = re.sub(r'(\n|^)\s*\*?Source:\s*Wasalt\.sa.*', '', text, flags=re.IGNORECASE)
 
-    # 2. Strip opening boilerplate phrases
-    boilerplate_pattern = r'^\s*(?:(?:Based on|According to) [^\n,:]*(?:database|records|listings|context|information)[^\n,:]*[,:\n]\s*|Here is what I can confirm about [^\n,:]*[:\n]\s*)'
+    # 2. Strip opening boilerplate phrases & cheerful AI greetings
+    boilerplate_pattern = r'^\s*(?:(?:Based on|According to) [^\n,:]*(?:database|records|listings|context|information)[^\n,:]*[,:\n]\s*|Here is what I can confirm about [^\n,:]*[:\n]\s*|(?:Certainly!|Sure!|Of course!|I would be pleased to assist|I would be delighted to assist)\s*)'
     text = re.sub(boilerplate_pattern, '', text, flags=re.IGNORECASE)
 
-    # 3. Strip inline citation numbers like [1], [2], [1][2], [1, 2]
+    # 3. Strip closing AI conversational pleasantries
+    text = re.sub(r'(\n|^)\s*(?:(?:Please )?(?:feel free to|let me know if|do not hesitate to|reach out if|hope this helps|if you have any (?:other )?questions)[^\n]*)+$', '', text, flags=re.IGNORECASE).strip()
+
+    # 4. Strip inline citation numbers like [1], [2], [1][2], [1, 2]
     text = re.sub(r'\[\s*\d+(?:\s*,\s*\d+)*\s*\]', '', text)
 
-    # 4. Clean up spaces before punctuation (e.g. 'Downtown .' -> 'Downtown.')
+    # 5. Strip extraneous decorative emojis to maintain clean executive tone
+    text = re.sub(r'[\U0001F300-\U0001FAFF\U00002702-\U000027B0]', '', text)
+
+    # 6. Clean up spaces before punctuation (e.g. 'Downtown .' -> 'Downtown.')
     text = re.sub(r'\s+([.,;:!?])', r'\1', text)
     text = text.strip()
 

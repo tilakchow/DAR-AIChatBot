@@ -172,22 +172,23 @@ HTML_UI = """<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DAR — DarGlobal & Wasalt AI Property Assistant</title>
+  <title>DAR — AI Property Assistant</title>
   <!-- Markdown parser and sanitizer -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
     :root {
-      --bg: #0f172a;
-      --card-bg: #1e293b;
-      --border: #334155;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --accent: #38bdf8;
-      --accent-hover: #0284c7;
-      --user-msg-bg: #0369a1;
-      --bot-msg-bg: #1e293b;
-      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --bg: #090b10;
+      --card-bg: #0f131c;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f1f5f9;
+      --text-muted: #8c98a9;
+      --accent: #d4b886;
+      --accent-hover: #e2cb9f;
+      --user-msg-bg: #18202f;
+      --bot-msg-bg: #0f131c;
+      --font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -198,24 +199,55 @@ HTML_UI = """<!DOCTYPE html>
       flex-direction: column;
       height: 100vh;
       overflow: hidden;
+      -webkit-font-smoothing: antialiased;
     }
     header {
       background: var(--card-bg);
       border-bottom: 1px solid var(--border);
-      padding: 1rem 1.5rem;
+      padding: 1.1rem 1.6rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    header h1 { font-size: 1.25rem; font-weight: 700; color: var(--accent); }
-    header p { font-size: 0.85rem; color: var(--text-muted); }
-    .badge {
-      background: rgba(56, 189, 248, 0.15);
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+    .monogram {
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      background: #171d2a;
+      border: 1px solid rgba(212, 184, 134, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.88rem;
+      letter-spacing: 0.06em;
       color: var(--accent);
-      padding: 0.25rem 0.6rem;
+    }
+    header h1 { font-size: 1.05rem; font-weight: 700; color: #ffffff; letter-spacing: 0.02em; }
+    header p { font-size: 0.8rem; color: var(--text-muted); }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #131924;
+      color: #cbd5e1;
+      padding: 0.35rem 0.75rem;
       border-radius: 9999px;
-      font-size: 0.75rem;
-      border: 1px solid var(--accent);
+      font-size: 0.72rem;
+      font-weight: 500;
+      border: 1px solid var(--border);
+    }
+    .badge::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
     }
     #chat-container {
       flex: 1;
@@ -223,20 +255,21 @@ HTML_UI = """<!DOCTYPE html>
       padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1.15rem;
     }
     .msg {
-      max-width: 80%;
-      padding: 1rem 1.25rem;
-      border-radius: 1rem;
-      line-height: 1.6;
-      font-size: 0.95rem;
+      max-width: 82%;
+      padding: 0.95rem 1.3rem;
+      border-radius: 12px;
+      line-height: 1.62;
+      font-size: 0.92rem;
       position: relative;
     }
     .msg.user {
       align-self: flex-end;
       background: var(--user-msg-bg);
       color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.09);
       border-bottom-right-radius: 0.25rem;
     }
     .msg.bot {
@@ -244,12 +277,13 @@ HTML_UI = """<!DOCTYPE html>
       background: var(--bot-msg-bg);
       border: 1px solid var(--border);
       border-bottom-left-radius: 0.25rem;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
     }
     .msg.bot p { margin-bottom: 0.5rem; }
     .msg.bot p:last-child { margin-bottom: 0; }
     .msg.bot ul, .msg.bot ol { margin: 0.4rem 0 0.5rem 1.25rem; }
     .msg.bot li { margin-bottom: 0.25rem; }
-    .msg.bot strong { color: var(--accent); font-weight: 600; }
+    .msg.bot strong { color: #ffffff; font-weight: 600; }
     .msg.bot code { background: rgba(15, 23, 42, 0.7); padding: 0.15rem 0.35rem; border-radius: 0.25rem; font-size: 0.85em; font-family: monospace; }
     .msg.rtl {
       direction: rtl;
@@ -259,41 +293,40 @@ HTML_UI = """<!DOCTYPE html>
     .citations-container {
       margin-top: 0.75rem;
       padding-top: 0.5rem;
-      border-top: 1px solid rgba(51, 65, 85, 0.4);
+      border-top: 1px solid var(--border);
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-      gap: 0.4rem;
+      gap: 0.45rem;
     }
     .citations-label {
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       font-weight: 600;
       margin-right: 0.2rem;
     }
     .source-chip {
-      width: 22px;
-      height: 22px;
-      border-radius: 9999px;
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      color: var(--accent);
+      height: 24px;
+      padding: 0 8px;
+      border-radius: 6px;
+      background: #141a26;
+      border: 1px solid var(--border);
+      color: #cbd5e1;
       font-size: 0.72rem;
-      font-weight: 600;
+      font-weight: 500;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       text-decoration: none;
       position: relative;
-      transition: all 0.2s ease;
+      transition: all 0.18s ease;
     }
     .source-chip:hover {
-      background: var(--accent);
-      color: #0f172a;
-      transform: translateY(-1px);
-      box-shadow: 0 2px 8px rgba(56, 189, 248, 0.3);
+      background: #1b2333;
+      color: var(--accent);
+      border-color: rgba(212, 184, 134, 0.4);
     }
     .source-chip::after {
       content: attr(data-tooltip);
@@ -301,9 +334,9 @@ HTML_UI = """<!DOCTYPE html>
       bottom: calc(100% + 6px);
       left: 50%;
       transform: translateX(-50%) translateY(4px);
-      background: #0f172a;
+      background: #090b10;
       color: #f8fafc;
-      border: 1px solid #334155;
+      border: 1px solid rgba(255, 255, 255, 0.15);
       padding: 4px 8px;
       border-radius: 6px;
       font-size: 0.72rem;
@@ -326,14 +359,14 @@ HTML_UI = """<!DOCTYPE html>
     .debug-panel {
       margin-top: 0.5rem;
       padding-top: 0.35rem;
-      border-top: 1px solid rgba(51, 65, 85, 0.25);
+      border-top: 1px solid var(--border);
       font-size: 0.7rem;
-      color: var(--text-muted);
+      color: #526071;
     }
     .debug-panel summary {
       cursor: pointer;
       user-select: none;
-      opacity: 0.65;
+      opacity: 0.7;
       transition: opacity 0.2s;
       outline: none;
     }
@@ -347,15 +380,15 @@ HTML_UI = """<!DOCTYPE html>
       flex-wrap: wrap;
       gap: 0.75rem;
       align-items: center;
-      background: rgba(15, 23, 42, 0.5);
+      background: #090b10;
       padding: 0.35rem 0.6rem;
       border-radius: 0.375rem;
       font-family: monospace;
       font-size: 0.68rem;
     }
     .cached-badge {
-      background: rgba(34, 197, 94, 0.2);
-      color: #4ade80;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
       padding: 1px 6px;
       border-radius: 9999px;
       font-size: 0.65rem;
@@ -371,21 +404,22 @@ HTML_UI = """<!DOCTYPE html>
       display: flex;
       gap: 0.5rem;
       overflow-x: auto;
-      padding: 0.5rem 1.5rem;
-      background: #1e293b;
-      border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+      padding: 0.55rem 1.5rem;
+      background: #0b0e14;
+      border-bottom: 1px solid var(--border);
     }
     .sample-chip {
-      background: #0f172a;
+      background: #11151f;
       border: 1px solid var(--border);
-      color: var(--text-muted);
+      color: #94a3b8;
       padding: 0.35rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.8rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
       cursor: pointer;
       white-space: nowrap;
+      transition: all 0.18s ease;
     }
-    .sample-chip:hover { color: var(--accent); border-color: var(--accent); }
+    .sample-chip:hover { color: #ffffff; border-color: rgba(212, 184, 134, 0.4); background: #171d2a; }
     #input-form {
       padding: 0.75rem 1.5rem;
       display: flex;
@@ -393,68 +427,70 @@ HTML_UI = """<!DOCTYPE html>
     }
     #query-input {
       flex: 1;
-      background: #0f172a;
+      background: #11151f;
       border: 1px solid var(--border);
-      border-radius: 0.75rem;
+      border-radius: 10px;
       color: var(--text);
       padding: 0.75rem 1rem;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       outline: none;
+      transition: border-color 0.2s;
     }
-    #query-input:focus { border-color: var(--accent); }
+    #query-input:focus { border-color: rgba(212, 184, 134, 0.5); }
     button {
-      background: var(--accent);
-      color: #0f172a;
-      font-weight: 700;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.75rem;
+      background: #171d2a;
+      color: var(--accent);
+      font-weight: 600;
+      border: 1px solid rgba(212, 184, 134, 0.35);
+      padding: 0.75rem 1.4rem;
+      border-radius: 10px;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.2s;
     }
-    button:hover { background: var(--accent-hover); color: #fff; }
+    button:hover { background: var(--accent); color: #090b10; }
     .disclaimer-pinned {
       text-align: center;
       font-size: 0.72rem;
-      color: var(--text-muted);
+      color: #526071;
       padding: 0.35rem 1.5rem 0.55rem;
-      border-top: 1px solid rgba(51, 65, 85, 0.4);
-      background: #1e293b;
+      border-top: 1px solid var(--border);
+      background: #090b10;
     }
   </style>
 </head>
 <body>
   <header>
-    <div>
-      <h1>DAR — AI Property Assistant</h1>
-      <p>DarGlobal Luxury Developments & Wasalt Saudi Property Listings</p>
+    <div class="header-brand">
+      <div class="monogram">DAR</div>
+      <div>
+        <h1>DAR — AI Property Assistant</h1>
+        <p>DarGlobal International Residences & Wasalt Kingdom Portfolios</p>
+      </div>
     </div>
-    <div class="badge">OpenRouter RAG · Free Tier</div>
+    <div class="badge">Verified Portfolio Index</div>
   </header>
 
   <div id="chat-container">
     <div class="msg bot">
-      Hello! I am DAR, your AI property assistant. You can ask me questions about DarGlobal's international luxury residences (such as The Astera, Trump International Towers, Les Vagues, DG1) or Wasalt's verified property listings in Saudi Arabia.
-      <br><br>
-      Feel free to ask in English or Arabic (العربية).
+      Welcome. I provide verified specifications, current pricing, and unit availability for DarGlobal international residences and Wasalt Saudi properties. What project or location are you reviewing today?
     </div>
   </div>
 
   <div class="bottom-section">
     <div class="sample-bar">
-      <div class="sample-chip" onclick="ask('What are the starting prices for The Astera?')">Starting prices for The Astera</div>
-      <div class="sample-chip" onclick="ask('Tell me about Trump International Hotel & Tower Dubai.')">Trump Tower Dubai</div>
-      <div class="sample-chip" onclick="ask('What villas are for sale in Riyadh on Wasalt?')">Villas for sale in Riyadh</div>
-      <div class="sample-chip" onclick="ask('ما هي تفاصيل مشروع ذا أستيرا؟')">تفاصيل مشروع ذا أستيرا (عربي)</div>
+      <div class="sample-chip" onclick="ask('What are the starting prices for The Astera?')">The Astera · Starting Prices</div>
+      <div class="sample-chip" onclick="ask('Tell me about Trump International Hotel & Tower Dubai.')">Trump Tower Dubai · Specifications</div>
+      <div class="sample-chip" onclick="ask('What villas are for sale in Riyadh on Wasalt?')">Riyadh Villas · Wasalt Listings</div>
+      <div class="sample-chip" onclick="ask('ما هي تفاصيل مشروع ذا أستيرا؟')">مشروع ذا أستيرا · تفاصيل المشروع</div>
     </div>
 
     <form id="input-form" onsubmit="sendMsg(event)">
-      <input type="text" id="query-input" placeholder="Ask about DarGlobal projects or Wasalt property listings..." autocomplete="off">
+      <input type="text" id="query-input" placeholder="Inquire about DarGlobal residences or Wasalt property listings..." autocomplete="off">
       <button type="submit" id="send-btn">Send</button>
     </form>
 
     <div class="disclaimer-pinned">
-      ⚠️ AI property advisor provides verified listings information. Not financial, investment, or legal advice. Availability and pricing subject to change.
+      Verified intelligence from indexed DarGlobal and Wasalt portfolios · Independent financial & legal due diligence advised
     </div>
   </div>
 

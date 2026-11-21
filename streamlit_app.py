@@ -35,25 +35,21 @@ from src.rag.schema import clean_answer_text
 # 1. Page Configuration
 # -----------------------------------------------------------------------------
 st.set_page_config(
-    page_title="DAR — Luxury Property AI Advisor",
+    page_title="DAR — Property Intelligence & Advisory",
     page_icon="🏛️",
     layout="centered",
     initial_sidebar_state="collapsed",
 )
 
 # -----------------------------------------------------------------------------
-# 2. Centralized Production-Grade Custom CSS (Obsidian & Champagne Gold Theme)
+# 2. Bespoke Editorial Dark Theme (Refined Obsidian & Warm Titanium)
 # -----------------------------------------------------------------------------
 st.markdown("""
 <style>
-    /* =========================================================================
-       GOOGLE FONTS (Cinzel for luxury serif titles, Plus Jakarta Sans for UI)
-       ========================================================================= */
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+    /* Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 
-    /* =========================================================================
-       CLEAN CANVAS & REMOVE STREAMLIT CHROME
-       ========================================================================= */
+    /* Remove Streamlit Default Chrome */
     #MainMenu { visibility: hidden !important; display: none !important; }
     footer { visibility: hidden !important; display: none !important; }
     header[data-testid="stHeader"] { visibility: hidden !important; display: none !important; }
@@ -61,156 +57,137 @@ st.markdown("""
     [data-testid="stDecoration"] { display: none !important; }
     [data-testid="stToolbar"] { display: none !important; }
 
-    /* Root App Background: Deep Obsidian Navy with Ambient Radial Glow */
+    /* Root Canvas: Architectural Obsidian Slate */
     .stApp {
-        background: radial-gradient(circle at 50% -12%, #182742 0%, #0B111E 48%, #05080F 100%) !important;
-        color: #F8FAFC !important;
-        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        background: #090B10 !important;
+        color: #F1F5F9 !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
         -webkit-font-smoothing: antialiased !important;
     }
 
     .block-container {
-        max-width: 880px !important;
-        padding-top: 1.8rem !important;
-        padding-bottom: 3rem !important;
+        max-width: 860px !important;
+        padding-top: 1.75rem !important;
+        padding-bottom: 2.5rem !important;
         padding-left: 1.25rem !important;
         padding-right: 1.25rem !important;
     }
 
-    /* =========================================================================
-       LUXURY HERO BRANDING SECTION
-       ========================================================================= */
-    .luxury-hero {
+    /* -------------------------------------------------------------------------
+       EDITORIAL BRAND HEADER
+       ------------------------------------------------------------------------- */
+    .brand-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background: linear-gradient(135deg, rgba(22, 34, 58, 0.72) 0%, rgba(10, 16, 28, 0.85) 100%);
-        border: 1px solid rgba(212, 175, 55, 0.26);
-        border-radius: 20px;
-        padding: 1.35rem 1.65rem;
-        margin-bottom: 1.5rem;
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-        transition: border-color 0.3s ease;
+        background: #0F131C;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 1.25rem 1.6rem;
+        margin-bottom: 1.35rem;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
     }
 
-    .luxury-hero:hover {
-        border-color: rgba(212, 175, 55, 0.42);
-    }
-
-    .hero-brand {
+    .brand-left {
         display: flex;
         align-items: center;
-        gap: 1.15rem;
+        gap: 1.1rem;
     }
 
-    .brand-crest {
+    .brand-monogram {
+        width: 44px;
+        height: 44px;
+        border-radius: 11px;
+        background: #171D2A;
+        border: 1px solid rgba(212, 184, 134, 0.35);
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 52px;
-        height: 52px;
-        border-radius: 14px;
-        background: linear-gradient(135deg, #1F2E4A 0%, #0E1626 100%);
-        border: 1.5px solid rgba(212, 175, 55, 0.55);
-        box-shadow: 0 0 18px rgba(212, 175, 55, 0.25);
-        font-size: 1.6rem;
+        font-weight: 700;
+        font-size: 0.95rem;
+        letter-spacing: 0.06em;
+        color: #D4B886;
     }
 
-    .brand-details {
+    .brand-copy {
         display: flex;
         flex-direction: column;
+        gap: 2px;
     }
 
-    .brand-title {
-        font-family: 'Cinzel', Georgia, serif;
-        font-size: 1.75rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        background: linear-gradient(135deg, #FFF9EB 0%, #E8C87A 50%, #C5A059 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        line-height: 1.15;
-    }
-
-    .brand-sub-badge {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        font-size: 0.65rem;
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        color: #D4AF37;
-        background: rgba(212, 175, 55, 0.12);
-        padding: 2px 7px;
-        border-radius: 6px;
-        border: 1px solid rgba(212, 175, 55, 0.3);
-        margin-left: 8px;
-        vertical-align: middle;
-        -webkit-text-fill-color: #D4AF37;
-    }
-
-    .brand-tagline {
-        font-size: 0.85rem;
-        color: #94A3B8;
-        font-weight: 400;
-        margin-top: 4px;
-        letter-spacing: 0.01em;
-    }
-
-    .hero-status {
+    .brand-title-row {
         display: flex;
         align-items: center;
-        gap: 8px;
-        background: rgba(14, 22, 38, 0.8);
-        border: 1px solid rgba(212, 175, 55, 0.22);
-        padding: 7px 14px;
-        border-radius: 9999px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        gap: 0.55rem;
     }
 
-    .status-pulse {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background-color: #10B981;
-        box-shadow: 0 0 10px #10B981;
-        animation: pulse-glow 2.2s infinite ease-in-out;
-    }
-
-    @keyframes pulse-glow {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.45; transform: scale(1.2); }
-    }
-
-    .status-text {
-        font-size: 0.72rem;
-        font-weight: 600;
-        letter-spacing: 0.07em;
-        color: #E2E8F0;
+    .brand-name {
+        font-size: 1.15rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: #FFFFFF;
         text-transform: uppercase;
     }
 
-    /* =========================================================================
-       SUGGESTED QUESTION CHIPS (PILL BUTTONS)
-       ========================================================================= */
+    .brand-tag {
+        font-size: 0.65rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        color: #D4B886;
+        background: rgba(212, 184, 134, 0.1);
+        border: 1px solid rgba(212, 184, 134, 0.25);
+        padding: 2px 7px;
+        border-radius: 5px;
+        text-transform: uppercase;
+    }
+
+    .brand-subtitle {
+        font-size: 0.82rem;
+        color: #8C98A9;
+        font-weight: 400;
+        letter-spacing: 0.01em;
+    }
+
+    .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        background: #131924;
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        padding: 6px 12px;
+        border-radius: 9999px;
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.03em;
+        color: #CBD5E1;
+    }
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background-color: #10B981;
+    }
+
+    /* -------------------------------------------------------------------------
+       SUGGESTION BUTTONS (CURATED INQUIRIES)
+       ------------------------------------------------------------------------- */
     div[data-testid="stHorizontalBlock"] {
-        gap: 0.55rem !important;
-        margin-bottom: 1.4rem !important;
+        gap: 0.5rem !important;
+        margin-bottom: 1.25rem !important;
     }
 
     div[data-testid="stHorizontalBlock"] div[data-testid="column"] button {
-        background: linear-gradient(145deg, rgba(22, 33, 56, 0.8), rgba(13, 20, 36, 0.9)) !important;
-        color: #E2E8F0 !important;
-        border: 1px solid rgba(212, 175, 55, 0.25) !important;
-        border-radius: 9999px !important;
-        font-size: 0.83rem !important;
+        background: #11151F !important;
+        color: #CBD5E1 !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 10px !important;
+        font-size: 0.81rem !important;
         font-weight: 500 !important;
-        letter-spacing: 0.015em !important;
-        padding: 0.52rem 0.9rem !important;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
-        backdrop-filter: blur(8px) !important;
-        -webkit-backdrop-filter: blur(8px) !important;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        letter-spacing: 0.01em !important;
+        padding: 0.52rem 0.85rem !important;
+        box-shadow: none !important;
+        transition: all 0.2s ease !important;
         width: 100% !important;
         white-space: nowrap !important;
         overflow: hidden !important;
@@ -218,35 +195,28 @@ st.markdown("""
     }
 
     div[data-testid="stHorizontalBlock"] div[data-testid="column"] button:hover {
-        background: linear-gradient(145deg, rgba(32, 48, 80, 0.95), rgba(19, 29, 50, 0.98)) !important;
-        border-color: #D4AF37 !important;
-        color: #FFF9EB !important;
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 22px rgba(212, 175, 55, 0.26), 0 0 10px rgba(212, 175, 55, 0.16) !important;
+        background: #171E2B !important;
+        border-color: rgba(212, 184, 134, 0.45) !important;
+        color: #FFFFFF !important;
     }
 
-    div[data-testid="stHorizontalBlock"] div[data-testid="column"] button:active {
-        transform: translateY(0) !important;
-    }
-
-    /* =========================================================================
-       CHAT MESSAGE BUBBLES
-       ========================================================================= */
+    /* -------------------------------------------------------------------------
+       CHAT MESSAGES
+       ------------------------------------------------------------------------- */
     [data-testid="stChatMessage"] {
         background-color: transparent !important;
         border: none !important;
-        padding: 0.45rem 0 !important;
-        margin-bottom: 0.65rem !important;
+        padding: 0.35rem 0 !important;
+        margin-bottom: 0.5rem !important;
     }
 
-    /* Avatar styling */
+    /* Avatars */
     [data-testid="stChatMessageAvatar"] {
-        background: linear-gradient(135deg, #1F2E4A, #0E1626) !important;
-        border: 1.5px solid rgba(212, 175, 55, 0.45) !important;
-        border-radius: 50% !important;
-        box-shadow: 0 0 12px rgba(212, 175, 55, 0.2) !important;
-        width: 38px !important;
-        height: 38px !important;
+        background: #131924 !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 10px !important;
+        width: 34px !important;
+        height: 34px !important;
     }
 
     /* User Message Container & Bubble */
@@ -257,152 +227,178 @@ st.markdown("""
 
     div[data-testid="stChatMessageContent"][aria-label*="user"],
     div[data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) div[data-testid="stChatMessageContent"] {
-        background: linear-gradient(135deg, #1E293B 0%, #131E30 100%) !important;
-        border: 1px solid rgba(148, 163, 184, 0.26) !important;
-        border-radius: 18px 4px 18px 18px !important;
-        padding: 0.95rem 1.35rem !important;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+        background: #18202F !important;
+        border: 1px solid rgba(255, 255, 255, 0.09) !important;
+        border-radius: 14px 4px 14px 14px !important;
+        padding: 0.85rem 1.15rem !important;
         color: #F8FAFC !important;
-        max-width: 82% !important;
+        max-width: 80% !important;
         margin-left: auto !important;
         margin-right: 0 !important;
-        font-size: 0.94rem !important;
-        line-height: 1.6 !important;
+        font-size: 0.92rem !important;
+        line-height: 1.55 !important;
     }
 
     /* Assistant Message Bubble */
     div[data-testid="stChatMessageContent"][aria-label*="assistant"],
     div[data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) div[data-testid="stChatMessageContent"] {
-        background: linear-gradient(145deg, rgba(18, 27, 46, 0.82) 0%, rgba(10, 16, 28, 0.92) 100%) !important;
-        border: 1px solid rgba(212, 175, 55, 0.22) !important;
-        border-left: 3.5px solid #D4AF37 !important;
-        border-radius: 4px 18px 18px 18px !important;
-        padding: 1.15rem 1.45rem !important;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
-        backdrop-filter: blur(14px) !important;
-        -webkit-backdrop-filter: blur(14px) !important;
-        color: #F1F5F9 !important;
+        background: #0F131C !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 4px 14px 14px 14px !important;
+        padding: 1.05rem 1.35rem !important;
+        color: #E2E8F0 !important;
         max-width: 88% !important;
-        font-size: 0.94rem !important;
-        line-height: 1.68 !important;
+        font-size: 0.92rem !important;
+        line-height: 1.62 !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
     }
 
-    /* Assistant text highlights */
     div[data-testid="stChatMessageContent"][aria-label*="assistant"] strong {
-        color: #F6E7BD !important;
+        color: #FFFFFF !important;
         font-weight: 600 !important;
     }
 
     div[data-testid="stChatMessageContent"][aria-label*="assistant"] p {
-        margin-bottom: 0.55rem !important;
+        margin-bottom: 0.5rem !important;
     }
 
     div[data-testid="stChatMessageContent"][aria-label*="assistant"] p:last-child {
         margin-bottom: 0 !important;
     }
 
-    /* =========================================================================
-       DEBUG EXPANDER & SOURCES ACCORDION
-       ========================================================================= */
+    /* -------------------------------------------------------------------------
+       ELEGANT SOURCE PILLS (VERIFIED EVIDENCE)
+       ------------------------------------------------------------------------- */
+    .sources-row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        margin-top: 0.85rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .sources-tag {
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        color: #64748B;
+        text-transform: uppercase;
+        margin-right: 0.25rem;
+    }
+
+    .source-chip-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: #141A26;
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        color: #94A3B8;
+        font-size: 0.75rem;
+        font-weight: 500;
+        padding: 3px 9px;
+        border-radius: 6px;
+        text-decoration: none !important;
+        transition: all 0.18s ease;
+    }
+
+    .source-chip-link:hover {
+        background: #1B2333;
+        border-color: rgba(212, 184, 134, 0.4);
+        color: #D4B886;
+    }
+
+    .source-chip-portal {
+        color: #D4B886;
+        font-weight: 600;
+        font-size: 0.7rem;
+    }
+
+    /* Discreet telemetry metadata */
+    .msg-telemetry {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.7rem;
+        color: #475569;
+        margin-top: 0.45rem;
+        letter-spacing: 0.02em;
+    }
+
+    .msg-telemetry span {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    /* -------------------------------------------------------------------------
+       EXPANDER FOR RAW TELEMETRY (CLEAN & SUBTLE)
+       ------------------------------------------------------------------------- */
     [data-testid="stExpander"] {
-        background: rgba(10, 16, 28, 0.6) !important;
-        border: 1px solid rgba(212, 175, 55, 0.16) !important;
-        border-radius: 10px !important;
-        margin-top: 0.55rem !important;
-        overflow: hidden !important;
+        background: transparent !important;
+        border: none !important;
+        margin-top: 0.35rem !important;
     }
 
     [data-testid="stExpander"] summary {
-        font-size: 0.78rem !important;
-        color: #94A3B8 !important;
+        font-size: 0.72rem !important;
+        color: #475569 !important;
         font-weight: 500 !important;
-        letter-spacing: 0.03em !important;
-        padding: 0.38rem 0.75rem !important;
-        transition: color 0.2s ease;
+        padding: 0.15rem 0.3rem !important;
+        transition: color 0.18s ease;
     }
 
     [data-testid="stExpander"] summary:hover {
-        color: #D4AF37 !important;
+        color: #94A3B8 !important;
     }
 
-    [data-testid="stExpander"] pre {
-        background-color: rgba(5, 8, 15, 0.7) !important;
-        border: 1px solid rgba(212, 175, 55, 0.12) !important;
-        border-radius: 8px !important;
-        padding: 0.6rem !important;
-        font-size: 0.75rem !important;
+    [data-testid="stExpander"] div[data-testid="stExpanderDetails"] {
+        padding: 0.4rem 0 !important;
     }
 
-    /* =========================================================================
+    /* -------------------------------------------------------------------------
        CHAT INPUT FIELD
-       ========================================================================= */
+       ------------------------------------------------------------------------- */
     [data-testid="stChatInput"] {
         background-color: transparent !important;
     }
 
     [data-testid="stChatInput"] textarea {
-        background: rgba(13, 20, 36, 0.88) !important;
+        background: #11151F !important;
         color: #F8FAFC !important;
-        border: 1px solid rgba(212, 175, 55, 0.32) !important;
-        border-radius: 14px !important;
-        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45) !important;
-        backdrop-filter: blur(14px) !important;
-        -webkit-backdrop-filter: blur(14px) !important;
-        font-size: 0.92rem !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px !important;
+        font-size: 0.91rem !important;
         padding: 0.75rem 1rem !important;
-        transition: all 0.25s ease !important;
+        transition: border-color 0.2s ease !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
     }
 
     [data-testid="stChatInput"] textarea:focus {
-        border-color: #D4AF37 !important;
-        box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.35), 0 8px 30px rgba(0, 0, 0, 0.6) !important;
+        border-color: rgba(212, 184, 134, 0.5) !important;
+        box-shadow: 0 0 0 1px rgba(212, 184, 134, 0.3), 0 4px 24px rgba(0, 0, 0, 0.4) !important;
     }
 
     [data-testid="stChatInput"] button {
-        color: #D4AF37 !important;
-        transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        color: #D4B886 !important;
     }
 
-    [data-testid="stChatInput"] button:hover {
-        transform: scale(1.12) !important;
-        color: #FFF9EB !important;
-    }
-
-    /* =========================================================================
-       PINNED LUXURY DISCLAIMER
-       ========================================================================= */
-    .luxury-disclaimer {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        font-size: 0.72rem;
-        color: #64748B;
-        letter-spacing: 0.025em;
-        margin-top: 1.3rem;
-        margin-bottom: 0.35rem;
+    /* -------------------------------------------------------------------------
+       FOOTER LEGAL DISCLAIMER
+       ------------------------------------------------------------------------- */
+    .brand-disclaimer {
         text-align: center;
-        padding: 0.35rem 0.75rem;
+        font-size: 0.72rem;
+        color: #526071;
+        letter-spacing: 0.02em;
+        margin-top: 1.25rem;
+        margin-bottom: 0.25rem;
+        padding: 0.25rem 0.5rem;
     }
 
-    .luxury-disclaimer .disc-icon {
-        color: #D4AF37;
-        font-size: 0.76rem;
-        opacity: 0.85;
-    }
-
-    /* =========================================================================
-       SPINNER ANIMATION
-       ========================================================================= */
-    .stSpinner > div {
-        border-top-color: #D4AF37 !important;
-    }
-
-    .stSpinner {
-        color: #E8C87A !important;
-        font-size: 0.85rem !important;
-        font-weight: 500 !important;
-        letter-spacing: 0.02em !important;
+    .brand-disclaimer a {
+        color: #64748B;
+        text-decoration: underline;
     }
 
     .rtl-text {
@@ -411,21 +407,15 @@ st.markdown("""
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, sans-serif;
     }
 
-    /* =========================================================================
-       RESPONSIVE DESIGN
-       ========================================================================= */
     @media (max-width: 640px) {
-        .luxury-hero {
+        .brand-header {
             flex-direction: column;
             align-items: flex-start;
-            gap: 12px;
-            padding: 1.1rem;
+            gap: 10px;
+            padding: 1rem;
         }
-        .hero-status {
+        .status-pill {
             align-self: flex-start;
-        }
-        .brand-title {
-            font-size: 1.45rem;
         }
         div[data-testid="stChatMessageContent"][aria-label*="user"],
         div[data-testid="stChatMessageContent"][aria-label*="assistant"] {
@@ -468,59 +458,56 @@ if "messages" not in st.session_state:
     st.session_state.messages = [
         {
             "role": "assistant",
-            "content": "Welcome to DAR Luxury Property Advisory. I specialize in DarGlobal's elite international developments (The Astera, Trump International Towers, Les Vagues, DG1) and Wasalt's verified prime properties across Saudi Arabia. How may I assist your portfolio today?",
+            "content": "Welcome. I provide verified specifications, current pricing, and unit availability for DarGlobal international residences and Wasalt Saudi properties. What project or location are you reviewing today?",
             "sources": [],
             "debug": None
         }
     ]
 
 # -----------------------------------------------------------------------------
-# 5. Luxury Hero Section
+# 5. Editorial Brand Header
 # -----------------------------------------------------------------------------
-st.markdown("""
-<div class="luxury-hero">
-    <div class="hero-brand">
-        <div class="brand-crest">
-            <span>🏛️</span>
-        </div>
-        <div class="brand-details">
-            <div class="brand-title">
-                DAR <span class="brand-sub-badge">PRIVATE PORTFOLIO</span>
+indexed_count = len(retriever.chunks_by_id) if hasattr(retriever, "chunks_by_id") else 4217
+
+st.markdown(f"""
+<div class="brand-header">
+    <div class="brand-left">
+        <div class="brand-monogram">DAR</div>
+        <div class="brand-copy">
+            <div class="brand-title-row">
+                <span class="brand-name">DAR Advisory</span>
+                <span class="brand-tag">PORTFOLIO INTELLIGENCE</span>
             </div>
-            <div class="brand-tagline">
-                AI Property Advisor for DarGlobal International & Wasalt Saudi Arabia
+            <div class="brand-subtitle">
+                DarGlobal International Residences & Wasalt Saudi Property Portfolios
             </div>
         </div>
     </div>
-    <div class="hero-status">
-        <div class="status-pulse"></div>
-        <span class="status-text">Verified Intelligence</span>
+    <div class="status-pill">
+        <div class="status-dot"></div>
+        <span>{indexed_count:,} Verified Chunks</span>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
-# 6. Curated Suggested Question Chips
+# 6. Curated Inquiries (Suggested Chips)
 # -----------------------------------------------------------------------------
 sample_chips = [
     {
-        "icon": "💎",
-        "label": "The Astera Prices",
+        "label": "The Astera · Starting Prices",
         "query": "What are the starting prices for The Astera?"
     },
     {
-        "icon": "🏙️",
-        "label": "Trump Tower Dubai",
+        "label": "Trump Tower Dubai · Specifications",
         "query": "Tell me about Trump International Hotel & Tower Dubai."
     },
     {
-        "icon": "🏡",
-        "label": "Wasalt Riyadh Villas",
+        "label": "Riyadh Villas · Wasalt Listings",
         "query": "What villas are for sale in Riyadh on Wasalt?"
     },
     {
-        "icon": "🌍",
-        "label": "مشروع ذا أستيرا",
+        "label": "مشروع ذا أستيرا · تفاصيل المشروع",
         "query": "ما هي تفاصيل مشروع ذا أستيرا؟"
     }
 ]
@@ -530,16 +517,38 @@ selected_query = None
 
 for i, chip in enumerate(sample_chips):
     with cols[i]:
-        btn_label = f"{chip['icon']} {chip['label']}"
-        if st.button(btn_label, key=f"chip_btn_{i}", help=chip["query"]):
+        if st.button(chip["label"], key=f"chip_btn_{i}", help=chip["query"]):
             selected_query = chip["query"]
 
 # -----------------------------------------------------------------------------
-# 7. Helper & Query Processing Logic
+# 7. Query Processing Logic
 # -----------------------------------------------------------------------------
 def is_arabic(text: str) -> bool:
     import re
     return bool(re.search(r'[\u0600-\u06FF]', text or ""))
+
+def render_sources_html(sources: list) -> str:
+    """Render clean, elegant source chips with portal tags."""
+    if not sources:
+        return ""
+    chips_html = []
+    for s in sources:
+        sid = s.get("id") or s.get("index") or "•"
+        title = s.get("title") or s.get("url") or f"Source {sid}"
+        url = s.get("url", "#")
+        site = s.get("site", "")
+        site_label = "DarGlobal" if site == "darglobal" else ("Wasalt" if site == "wasalt" else "Source")
+        chips_html.append(
+            f'<a class="source-chip-link" href="{url}" target="_blank" rel="noopener noreferrer">'
+            f'<span class="source-chip-portal">{site_label}</span> {title} ↗'
+            f'</a>'
+        )
+    return (
+        f'<div class="sources-row">'
+        f'<span class="sources-tag">Verified Sources</span>'
+        f'{"".join(chips_html)}'
+        f'</div>'
+    )
 
 def process_query(user_query: str):
     """Execute the end-to-end RAG pipeline and return answer, sources, debug dict."""
@@ -645,22 +654,21 @@ for msg in st.session_state.messages:
         else:
             st.markdown(content)
         
-        # Collapsed Debug Info
-        debug = msg.get("debug")
+        # Render verified source pills directly under assistant answers
         msg_sources = msg.get("sources", [])
-        if debug:
-            with st.expander("Debug Info", expanded=False):
-                model_name = debug.get("model_used", "N/A")
-                latency = debug.get("latency_ms", 0.0)
-                is_cached = debug.get("cached", False)
-                st.code(f"Model: {model_name}\nLatency: {latency}ms\nCached: {is_cached}", language="yaml")
-                if msg_sources:
-                    st.caption("Referenced Sources:")
-                    for s in msg_sources:
-                        sid = s.get("id") or s.get("index") or "•"
-                        title = s.get("title") or s.get("url") or f"Source {sid}"
-                        url = s.get("url", "#")
-                        st.markdown(f"- [{sid}] [{title}]({url})")
+        if role == "assistant" and msg_sources:
+            st.markdown(render_sources_html(msg_sources), unsafe_allow_html=True)
+
+        # Subtle telemetry info
+        debug = msg.get("debug")
+        if debug and role == "assistant":
+            model_name = debug.get("model_used", "")
+            latency = debug.get("latency_ms", 0.0)
+            is_cached = debug.get("cached", False)
+            if model_name:
+                cached_tag = " · Cached" if is_cached else ""
+                telemetry_str = f"⚡ {latency}ms · {model_name}{cached_tag}"
+                st.markdown(f'<div class="msg-telemetry"><span>{telemetry_str}</span></div>', unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
 # 9. Input Handling (Chat Input or Sample Button)
@@ -685,7 +693,7 @@ if query_to_run:
 
     # Generate assistant message
     with st.chat_message("assistant", avatar="🏛️"):
-        with st.spinner("Consulting luxury property portfolio & verified records..."):
+        with st.spinner("Retrieving verified portfolio records..."):
             ans_text, sources, debug_info = process_query(query_to_run)
             
             if is_arabic(ans_text):
@@ -693,19 +701,17 @@ if query_to_run:
             else:
                 st.markdown(ans_text)
             
+            if sources:
+                st.markdown(render_sources_html(sources), unsafe_allow_html=True)
+
             if debug_info:
-                with st.expander("Debug Info", expanded=False):
-                    model_name = debug_info.get("model_used", "N/A")
-                    latency = debug_info.get("latency_ms", 0.0)
-                    is_cached = debug_info.get("cached", False)
-                    st.code(f"Model: {model_name}\nLatency: {latency}ms\nCached: {is_cached}", language="yaml")
-                    if sources:
-                        st.caption("Referenced Sources:")
-                        for s in sources:
-                            sid = s.get("id") or s.get("index") or "•"
-                            title = s.get("title") or s.get("url") or f"Source {sid}"
-                            url = s.get("url", "#")
-                            st.markdown(f"- [{sid}] [{title}]({url})")
+                model_name = debug_info.get("model_used", "")
+                latency = debug_info.get("latency_ms", 0.0)
+                is_cached = debug_info.get("cached", False)
+                if model_name:
+                    cached_tag = " · Cached" if is_cached else ""
+                    telemetry_str = f"⚡ {latency}ms · {model_name}{cached_tag}"
+                    st.markdown(f'<div class="msg-telemetry"><span>{telemetry_str}</span></div>', unsafe_allow_html=True)
 
     st.session_state.messages.append({
         "role": "assistant",
@@ -715,12 +721,11 @@ if query_to_run:
     })
 
 # -----------------------------------------------------------------------------
-# 10. Refined Pinned Luxury Disclaimer
+# 10. Refined Pinned Legal Disclaimer
 # -----------------------------------------------------------------------------
 st.markdown(
-    '<div class="luxury-disclaimer">'
-    '<span class="disc-icon">⚜️</span>'
-    '<span>Verified luxury listings intelligence · Independent financial & legal due diligence recommended · Subject to real-time market updates</span>'
+    '<div class="brand-disclaimer">'
+    'Verified intelligence from indexed DarGlobal and Wasalt portfolios · Independent financial & legal due diligence advised'
     '</div>',
     unsafe_allow_html=True
 )
